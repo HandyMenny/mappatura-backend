@@ -42,10 +42,6 @@ const { handleError } = require("./error");
         where: { province: req.params.province },
       });
 
-      if (cities.length === 0) {
-        throw new Error("no cities found for the provided province");
-      }
-
       res.json(cities.map((obj) => obj.city));
     } catch (error) {
       handleError(
@@ -98,7 +94,7 @@ const { handleError } = require("./error");
         throw new Error("you must provide the egon id");
       }
 
-      let data = await Egon.findOne({
+      const data = await Egon.findOne({
         where: { egon: req.query.id },
       });
 
