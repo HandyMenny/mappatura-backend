@@ -1,0 +1,142 @@
+{
+  "VALLEDAOSTA": {
+    "provinces": ["AOSTA"]
+  },
+  "MOLISE": {
+    "provinces": ["CAMPOBASSO", "ISERNIA"]
+  },
+  "TRENTINO-ALTOADIGE": {
+    "provinces": ["BOLZANO", "TRENTO"]
+  },
+  "BASILICATA": {
+    "provinces": ["MATERA", "POTENZA"]
+  },
+  "UMBRIA": {
+    "provinces": ["PERUGIA", "TERNI"]
+  },
+  "MARCHE": {
+    "provinces": [
+      "ANCONA",
+      "ASCOLI PICENO",
+      "FERMO",
+      "MACERATA",
+      "PESARO URBINO"
+    ]
+  },
+  "FRIULI-VENEZIAGIULIA": {
+    "provinces": ["GORIZIA", "PORDENONE", "TRIESTE", "UDINE"]
+  },
+  "LIGURIA": {
+    "provinces": ["GENOVA", "IMPERIA", "LA SPEZIA", "SAVONA"]
+  },
+  "ABRUZZO": {
+    "provinces": ["CHIETI", "L'AQUILA", "PESCARA", "TERAMO"]
+  },
+  "PIEMONTE": {
+    "provinces": [
+      "ALESSANDRIA",
+      "ASTI",
+      "BIELLA",
+      "CUNEO",
+      "NOVARA",
+      "TORINO",
+      "VERBANO CUSIO OSSOLA",
+      "VERCELLI"
+    ]
+  },
+  "SARDEGNA": {
+    "provinces": ["CAGLIARI", "NUORO", "ORISTANO", "SASSARI", "SUD SARDEGNA"]
+  },
+  "CAMPANIA": {
+    "provinces": ["AVELLINO", "BENEVENTO", "CASERTA", "NAPOLI", "SALERNO"]
+  },
+  "VENETO": {
+    "provinces": [
+      "BELLUNO",
+      "PADOVA",
+      "ROVIGO",
+      "TREVISO",
+      "VENEZIA",
+      "VERONA",
+      "VICENZA"
+    ]
+  },
+  "LAZIO": {
+    "provinces": ["FROSINONE", "LATINA", "RIETI", "ROMA", "VITERBO"]
+  },
+  "TOSCANA": {
+    "provinces": [
+      "AREZZO",
+      "FIRENZE",
+      "GROSSETO",
+      "LIVORNO",
+      "LUCCA",
+      "MASSA CARRARA",
+      "PISA",
+      "PISTOIA",
+      "PRATO",
+      "SIENA"
+    ]
+  },
+  "EMILIA-ROMAGNA": {
+    "provinces": [
+      "BOLOGNA",
+      "FERRARA",
+      "FORLI' CESENA",
+      "MODENA",
+      "PARMA",
+      "PIACENZA",
+      "RAVENNA",
+      "REGGIO EMILIA",
+      "RIMINI"
+    ]
+  },
+  "CALABRIA": {
+    "provinces": [
+      "CATANZARO",
+      "COSENZA",
+      "CROTONE",
+      "REGGIO CALABRIA",
+      "VIBO VALENTIA"
+    ]
+  },
+  "LOMBARDIA": {
+    "provinces": [
+      "BERGAMO",
+      "BRESCIA",
+      "COMO",
+      "CREMONA",
+      "LECCO",
+      "LODI",
+      "MANTOVA",
+      "MILANO",
+      "MONZA E DELLA BRIANZA",
+      "PAVIA",
+      "SONDRIO",
+      "VARESE"
+    ]
+  },
+  "PUGLIA": {
+    "provinces": [
+      "BARI",
+      "BARLETTA ANDRIA TRANI",
+      "BRINDISI",
+      "FOGGIA",
+      "LECCE",
+      "TARANTO"
+    ]
+  },
+  "SICILIA": {
+    "provinces": [
+      "AGRIGENTO",
+      "CALTANISSETTA",
+      "CATANIA",
+      "ENNA",
+      "MESSINA",
+      "PALERMO",
+      "RAGUSA",
+      "SIRACUSA",
+      "TRAPANI"
+    ]
+  }
+}

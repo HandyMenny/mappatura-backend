@@ -1,0 +1,23 @@
+{
+  "name": "mappatura-infratel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
+    "morgan": "^1.10.0",
+    "sequelize": "^6.6.5",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
