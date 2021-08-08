@@ -33,9 +33,11 @@ const Egon = db.define(
     },
     peakVel: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     below300Mbps: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
   },
   {
