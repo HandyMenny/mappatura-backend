@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const helmet = require("helmet");
 const { Sequelize, Op } = require("sequelize");
 const db = require("./db");
@@ -15,6 +16,7 @@ const { handleError } = require("./error");
 
   app.use(express.json());
   app.use(morgan("common"));
+  app.use(cors());
   app.use(helmet());
   app.set("trust proxy", 1);
 
