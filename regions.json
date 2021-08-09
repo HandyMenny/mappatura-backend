@@ -1,82 +1,21 @@
 {
-  "VALLEDAOSTA": {
-    "provinces": ["AOSTA"]
-  },
-  "MOLISE": {
-    "provinces": ["CAMPOBASSO", "ISERNIA"]
-  },
-  "TRENTINO-ALTOADIGE": {
-    "provinces": ["BOLZANO", "TRENTO"]
+  "ABRUZZO": {
+    "provinces": ["CHIETI", "L'AQUILA", "PESCARA", "TERAMO"]
   },
   "BASILICATA": {
     "provinces": ["MATERA", "POTENZA"]
   },
-  "UMBRIA": {
-    "provinces": ["PERUGIA", "TERNI"]
-  },
-  "MARCHE": {
+  "CALABRIA": {
     "provinces": [
-      "ANCONA",
-      "ASCOLI PICENO",
-      "FERMO",
-      "MACERATA",
-      "PESARO URBINO"
+      "CATANZARO",
+      "COSENZA",
+      "CROTONE",
+      "REGGIO CALABRIA",
+      "VIBO VALENTIA"
     ]
-  },
-  "FRIULI-VENEZIAGIULIA": {
-    "provinces": ["GORIZIA", "PORDENONE", "TRIESTE", "UDINE"]
-  },
-  "LIGURIA": {
-    "provinces": ["GENOVA", "IMPERIA", "LA SPEZIA", "SAVONA"]
-  },
-  "ABRUZZO": {
-    "provinces": ["CHIETI", "L'AQUILA", "PESCARA", "TERAMO"]
-  },
-  "PIEMONTE": {
-    "provinces": [
-      "ALESSANDRIA",
-      "ASTI",
-      "BIELLA",
-      "CUNEO",
-      "NOVARA",
-      "TORINO",
-      "VERBANO CUSIO OSSOLA",
-      "VERCELLI"
-    ]
-  },
-  "SARDEGNA": {
-    "provinces": ["CAGLIARI", "NUORO", "ORISTANO", "SASSARI", "SUD SARDEGNA"]
   },
   "CAMPANIA": {
     "provinces": ["AVELLINO", "BENEVENTO", "CASERTA", "NAPOLI", "SALERNO"]
-  },
-  "VENETO": {
-    "provinces": [
-      "BELLUNO",
-      "PADOVA",
-      "ROVIGO",
-      "TREVISO",
-      "VENEZIA",
-      "VERONA",
-      "VICENZA"
-    ]
-  },
-  "LAZIO": {
-    "provinces": ["FROSINONE", "LATINA", "RIETI", "ROMA", "VITERBO"]
-  },
-  "TOSCANA": {
-    "provinces": [
-      "AREZZO",
-      "FIRENZE",
-      "GROSSETO",
-      "LIVORNO",
-      "LUCCA",
-      "MASSA CARRARA",
-      "PISA",
-      "PISTOIA",
-      "PRATO",
-      "SIENA"
-    ]
   },
   "EMILIA-ROMAGNA": {
     "provinces": [
@@ -91,14 +30,14 @@
       "RIMINI"
     ]
   },
-  "CALABRIA": {
-    "provinces": [
-      "CATANZARO",
-      "COSENZA",
-      "CROTONE",
-      "REGGIO CALABRIA",
-      "VIBO VALENTIA"
-    ]
+  "FRIULI-VENEZIAGIULIA": {
+    "provinces": ["GORIZIA", "PORDENONE", "TRIESTE", "UDINE"]
+  },
+  "LAZIO": {
+    "provinces": ["FROSINONE", "LATINA", "RIETI", "ROMA", "VITERBO"]
+  },
+  "LIGURIA": {
+    "provinces": ["GENOVA", "IMPERIA", "LA SPEZIA", "SAVONA"]
   },
   "LOMBARDIA": {
     "provinces": [
@@ -116,6 +55,30 @@
       "VARESE"
     ]
   },
+  "MARCHE": {
+    "provinces": [
+      "ANCONA",
+      "ASCOLI PICENO",
+      "FERMO",
+      "MACERATA",
+      "PESARO URBINO"
+    ]
+  },
+  "MOLISE": {
+    "provinces": ["CAMPOBASSO", "ISERNIA"]
+  },
+  "PIEMONTE": {
+    "provinces": [
+      "ALESSANDRIA",
+      "ASTI",
+      "BIELLA",
+      "CUNEO",
+      "NOVARA",
+      "TORINO",
+      "VERBANO CUSIO OSSOLA",
+      "VERCELLI"
+    ]
+  },
   "PUGLIA": {
     "provinces": [
       "BARI",
@@ -125,6 +88,9 @@
       "LECCE",
       "TARANTO"
     ]
+  },
+  "SARDEGNA": {
+    "provinces": ["CAGLIARI", "NUORO", "ORISTANO", "SASSARI", "SUD SARDEGNA"]
   },
   "SICILIA": {
     "provinces": [
@@ -137,6 +103,40 @@
       "RAGUSA",
       "SIRACUSA",
       "TRAPANI"
+    ]
+  },
+  "TOSCANA": {
+    "provinces": [
+      "AREZZO",
+      "FIRENZE",
+      "GROSSETO",
+      "LIVORNO",
+      "LUCCA",
+      "MASSA CARRARA",
+      "PISA",
+      "PISTOIA",
+      "PRATO",
+      "SIENA"
+    ]
+  },
+  "TRENTINO-ALTOADIGE": {
+    "provinces": ["BOLZANO", "TRENTO"]
+  },
+  "UMBRIA": {
+    "provinces": ["PERUGIA", "TERNI"]
+  },
+  "VALLEDAOSTA": {
+    "provinces": ["AOSTA"]
+  },
+  "VENETO": {
+    "provinces": [
+      "BELLUNO",
+      "PADOVA",
+      "ROVIGO",
+      "TREVISO",
+      "VENEZIA",
+      "VERONA",
+      "VICENZA"
     ]
   }
 }
