@@ -1,12 +1,13 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
-const { Sequelize, Op } = require("sequelize");
 const db = require("./db");
 const { Egon } = require("./db/Egon");
 const regions = require("./regions.json");
 const { handleError } = require("./error");
+
 
 (async () => {
   const app = express();
@@ -19,6 +20,7 @@ const { handleError } = require("./error");
   app.use(cors());
   app.use(helmet());
   app.set("trust proxy", 1);
+  app.use(rateLimit({windowMs: 10 * 60 * 1000, max: 100, handler: (req, res) => res.status(429).json({error: "too many requests"})}))
 
   // Regions query.
   app.get("/regions", (req, res) => {
