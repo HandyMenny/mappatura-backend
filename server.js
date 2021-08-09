@@ -3,11 +3,11 @@ const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
+const listEndpoints = require("express-list-endpoints");
 const db = require("./db");
 const { Egon } = require("./db/Egon");
 const regions = require("./regions.json");
-const { handleError } = require("./error");
-
+const { HTTPError, handleError } = require("./error");
 
 (async () => {
   const app = express();
@@ -20,7 +20,13 @@ const { handleError } = require("./error");
   app.use(cors());
   app.use(helmet());
   app.set("trust proxy", 1);
-  app.use(rateLimit({windowMs: 10 * 60 * 1000, max: 100, handler: (req, res) => res.status(429).json({error: "too many requests"})}))
+  app.use(
+    rateLimit({
+      windowMs: 10 * 60 * 1000,
+      max: 100,
+      handler: (req, res) => handleError(429, "too many requests", res),
+    }),
+  );
 
   // Regions query.
   app.get("/regions", (req, res) => {
@@ -33,7 +39,11 @@ const { handleError } = require("./error");
       const provinces = regions[req.params.region].provinces;
       res.json(provinces);
     } catch (_) {
-      handleError("could not find any provinces for the provided region", res);
+      handleError(
+        404,
+        "could not find any provinces for the provided region",
+        res,
+      );
     }
   });
 
@@ -49,7 +59,8 @@ const { handleError } = require("./error");
       res.json(cities.map((obj) => obj.city));
     } catch (error) {
       handleError(
-        error.message || "error retrieving cities for the provided province",
+        500,
+        "error retrieving cities for the provided province",
         res,
       );
     }
@@ -69,10 +80,7 @@ const { handleError } = require("./error");
 
       res.json(streets.map((obj) => obj.street));
     } catch (error) {
-      handleError(
-        error.message || "error retrieving streets for the provided city",
-        res,
-      );
+      handleError(500, "error retrieving streets for the provided city", res);
     }
   });
 
@@ -87,7 +95,7 @@ const { handleError } = require("./error");
 
       res.json(numbers);
     } catch (error) {
-      handleError(error.message || "error retrieving numbers for this street");
+      handleError(500, "error retrieving numbers for this street", res);
     }
   });
 
@@ -95,7 +103,7 @@ const { handleError } = require("./error");
   app.get("/egon", async (req, res) => {
     try {
       if (!req.query.id) {
-        throw new Error("you must provide the egon id");
+        throw new HTTPError(400, "you must provide the egon id");
       }
 
       const data = await Egon.findOne({
@@ -103,18 +111,34 @@ const { handleError } = require("./error");
       });
 
       if (!data) {
-        throw new Error("no data available for this egon");
+        throw new HTTPError(404, "no data available for this egon");
       }
 
       res.json(data);
     } catch (error) {
       handleError(
+        error.statusCode || 500,
         error.message || "error retrieving streets for the provided city",
         res,
       );
     }
   });
 
+  app.get("/", (req, res) => {
+    const endpoints = listEndpoints(app).flatMap(({ path, methods }) =>
+      !(path === "*" || path === "/")
+        ? {
+            path,
+            methods,
+            query: path === "/egon" ? ["id"] : undefined,
+          }
+        : [],
+    );
+
+    res.json(endpoints);
+  });
+
+  // Catch all errors.
   app.get("*", (req, res) => {
     res.status(404).json({ error: "route not found" });
   });
