@@ -88,10 +88,31 @@ const { HTTPError, handleError } = require("./error");
   app.get("/:province/:city/:street/numbers", async (req, res) => {
     try {
       const { province, city, street } = req.params;
-      const numbers = await Egon.findAll({
+      let numbers = await Egon.findAll({
         where: { province, city, street },
         attributes: ["number", "egon"],
       });
+
+      // Sort numbers.
+      numbers
+        .sort((a, b) => {
+          if (a.number === "SNC") {
+            return -1;
+          }
+          if (b.number === "SNC") {
+            return 1;
+          }
+          return (
+            a.number.length - b.number.length ||
+            a.number.localeCompare(b.number)
+          );
+        })
+        .sort((a, b) => {
+          const aNum = Number(a.number.split("/")[0]);
+          const bNum = Number(b.number.split("/")[0]);
+
+          return aNum - bNum;
+        });
 
       res.json(numbers);
     } catch (error) {
