@@ -31,7 +31,7 @@ const Egon = db.define(
     color: {
       type: DataTypes.TEXT,
     },
-    peakVel: {
+    peakSpeed: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

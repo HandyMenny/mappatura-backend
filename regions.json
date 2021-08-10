@@ -30,7 +30,7 @@
       "RIMINI"
     ]
   },
-  "FRIULI-VENEZIAGIULIA": {
+  "FRIULI-VENEZIA GIULIA": {
     "provinces": ["GORIZIA", "PORDENONE", "TRIESTE", "UDINE"]
   },
   "LAZIO": {
@@ -119,13 +119,13 @@
       "SIENA"
     ]
   },
-  "TRENTINO-ALTOADIGE": {
+  "TRENTINO-ALTO ADIGE": {
     "provinces": ["BOLZANO", "TRENTO"]
   },
   "UMBRIA": {
     "provinces": ["PERUGIA", "TERNI"]
   },
-  "VALLEDAOSTA": {
+  "VALLE D'AOSTA": {
     "provinces": ["AOSTA"]
   },
   "VENETO": {
