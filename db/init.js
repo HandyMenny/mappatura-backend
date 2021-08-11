@@ -25,6 +25,10 @@ const getHouseNumber = (address) => {
   console.log("begin processing CSV files...");
 
   for (let file of files) {
+    if (file == ".keep") {
+      continue;
+    }
+
     console.log(`begin reading of ${file}`);
 
     const readFile = fs.readFileSync(path.join(__dirname, "..", "csv", file));

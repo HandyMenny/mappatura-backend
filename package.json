@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "init:db": "node db/init.js"
+    "init:csv": "./init-csv.sh",
+    "init:db": "node db/init.js",
+    "init": "npm run init:csv && npm run init:db"
   },
   "keywords": [],
   "author": "",
