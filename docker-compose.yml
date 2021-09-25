@@ -1,0 +1,16 @@
+version: "3.9"
+
+networks:
+  proxy:
+    external: true
+
+services:
+  mappatura2021-backend:
+    container_name: mappatura2021-backend
+    volumes:
+      - "./db.sqlite:/usr/src/app/db.sqlite"
+    networks:
+      - proxy
+    image: theedoran/mappatura2021-backend:latest
+    init: true
+    restart: unless-stopped
