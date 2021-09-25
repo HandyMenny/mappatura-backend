@@ -16,7 +16,7 @@ const { HTTPError, handleError } = require("./error");
   console.log("connected to db");
 
   app.use(express.json());
-  app.use(morgan("common"));
+  app.use(morgan("tiny"));
   app.use(cors());
   app.use(helmet());
   app.set("trust proxy", 1);
@@ -25,7 +25,7 @@ const { HTTPError, handleError } = require("./error");
       windowMs: 10 * 60 * 1000,
       max: 100,
       handler: (req, res) => handleError(429, "too many requests", res),
-    }),
+    })
   );
 
   // Regions query.
@@ -42,7 +42,7 @@ const { HTTPError, handleError } = require("./error");
       handleError(
         404,
         "could not find any provinces for the provided region",
-        res,
+        res
       );
     }
   });
@@ -61,7 +61,7 @@ const { HTTPError, handleError } = require("./error");
       handleError(
         500,
         "error retrieving cities for the provided province",
-        res,
+        res
       );
     }
   });
@@ -140,7 +140,7 @@ const { HTTPError, handleError } = require("./error");
       handleError(
         error.statusCode || 500,
         error.message || "error retrieving streets for the provided city",
-        res,
+        res
       );
     }
   });
@@ -153,7 +153,7 @@ const { HTTPError, handleError } = require("./error");
             methods,
             query: path === "/egon" ? ["id"] : undefined,
           }
-        : [],
+        : []
     );
 
     res.json(endpoints);
