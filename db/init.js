@@ -17,6 +17,18 @@ const getHouseNumber = (address) => {
   return number;
 };
 
+const getStreetWithHamlet = (street, address) => {
+  const splitIdx = address.indexOf(',');
+  const streetStart = address.indexOf(street);
+  if(splitIdx < streetStart) {
+    let hamlet = address.substring(0, splitIdx).trim();
+    if (hamlet.length > 0) {
+      return street + " - " + hamlet;
+    }
+  }
+  return street;
+};
+
 (async () => {
   await db.sync();
 
@@ -48,7 +60,7 @@ const getHouseNumber = (address) => {
           record[1],
           record[2],
           record[3],
-          record[4],
+          getStreetWithHamlet(record[4], record[6]),
           getHouseNumber(record[6]),
           record[7],
           Number(record[8]),
