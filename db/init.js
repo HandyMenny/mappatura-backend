@@ -20,6 +20,7 @@ const getHouseNumber = (address) => {
 (async () => {
   await db.sync();
 
+  const chunkSize = 100000;
   const files = fs.readdirSync(path.join(__dirname, "..", "csv"));
 
   console.log("begin processing CSV files...");
@@ -59,19 +60,21 @@ const getHouseNumber = (address) => {
     console.log("done");
     console.log(`begin writing ${file} to db`);
 
-    await Egon.bulkCreate(
-      parsedRecords.map((record) => ({
-        egon: record[0],
-        region: record[1],
-        province: record[2],
-        city: record[3],
-        street: record[4],
-        number: record[5],
-        color: record[6],
-        peakSpeed: record[7],
-        below300Mbps: record[8],
-      })),
-    );
+    for(let i = 0; i < parsedRecords.length; i += chunkSize) {
+      await Egon.bulkCreate(
+          parsedRecords.slice(i, i + chunkSize).map((record) => ({
+            egon: record[0],
+            region: record[1],
+            province: record[2],
+            city: record[3],
+            street: record[4],
+            number: record[5],
+            color: record[6],
+            peakSpeed: record[7],
+            below300Mbps: record[8],
+          })),
+      );
+    }
 
     console.log(`done processing ${file}`);
   }
