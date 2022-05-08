@@ -6,17 +6,20 @@ const { Egon } = require(path.join(__dirname, "Egon"));
 
 const getHouseNumber = (houseNumber, fullAddress) => {
   const splitIdx = fullAddress.lastIndexOf(",");
-  let number = fullAddress.substring(splitIdx + 1);
-    number = number.split(/[ ]+/).slice(1).reverse();
+  let number = fullAddress.substring(splitIdx + 1).split(/[ ]+/).slice(1);
+
   if(houseNumber === "0" && number.length === 1 && houseNumber !== number[0]) {
     /* houseNumber (0) is appended to number */
     number = `km. ${number[0]/10}`;
   } else {
-    if (number[1] === "SNC") {
-      number.shift();
-    }
-    number = number.join("/");
-  }
+   // Last element is houseNumber
+   number.pop();
+   if (number[0] !== "SNC") {
+     // Add houseNumber at the beginning
+     number.unshift(houseNumber);
+   }
+   number = number.join("/");
+ }
 
   return number;
 };
