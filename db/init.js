@@ -4,15 +4,19 @@ const fs = require("fs");
 const db = require(path.join(__dirname));
 const { Egon } = require(path.join(__dirname, "Egon"));
 
-const getHouseNumber = (address) => {
-  const splitIdx = address.lastIndexOf(",");
-  let number = address.substring(splitIdx + 1);
-  number = number.split(/[ ]+/).slice(1).reverse();
-  if (number[1] === "SNC") {
-    number.shift();
+const getHouseNumber = (houseNumber, fullAddress) => {
+  const splitIdx = fullAddress.lastIndexOf(",");
+  let number = fullAddress.substring(splitIdx + 1);
+    number = number.split(/[ ]+/).slice(1).reverse();
+  if(houseNumber === "0" && number.length === 1 && houseNumber !== number[0]) {
+    /* houseNumber (0) is appended to number */
+    number = `km. ${number[0]/10}`;
+  } else {
+    if (number[1] === "SNC") {
+      number.shift();
+    }
+    number = number.join("/");
   }
-
-  number = number.join("/");
 
   return number;
 };
@@ -61,7 +65,7 @@ const getStreetWithHamlet = (street, address) => {
           record[2],
           record[3],
           getStreetWithHamlet(record[4], record[6]),
-          getHouseNumber(record[6]),
+          getHouseNumber(record[5], record[6]),
           record[7],
           Number(record[8]),
           Number(record[9]),
