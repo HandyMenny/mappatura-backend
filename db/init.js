@@ -40,9 +40,9 @@ const getStreetWithHamlet = (street, address) => {
   await db.sync();
 
   const chunkSize = 100000;
-  const files = fs.readdirSync(path.join(__dirname, "..", "csv"));
+  const files = fs.readdirSync(path.join(__dirname, "..", "csv/Consultazione2021"));
 
-  console.log("begin processing CSV files...");
+  console.log("begin processing Consultazione2021 CSV files...");
 
   for (let file of files) {
     if (file == ".keep") {
@@ -51,7 +51,7 @@ const getStreetWithHamlet = (street, address) => {
 
     console.log(`begin reading of ${file}`);
 
-    const readFile = fs.readFileSync(path.join(__dirname, "..", "csv", file));
+    const readFile = fs.readFileSync(path.join(__dirname, "..", "csv/Consultazione2021", file));
 
     console.log("done");
     console.log(`begin parsing of ${file}`);
@@ -97,5 +97,5 @@ const getStreetWithHamlet = (street, address) => {
 
     console.log(`done processing ${file}`);
   }
-  console.log("done processing CSV files");
+  console.log("done processing Consultazione2021 CSV files");
 })();
