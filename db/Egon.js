@@ -33,11 +33,14 @@ const Egon = db.define(
     },
     peakSpeed: {
       type: DataTypes.INTEGER,
-      allowNull: false,
     },
     below300Mbps: {
       type: DataTypes.INTEGER,
+    },
+    bando1Giga: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
   },
   {

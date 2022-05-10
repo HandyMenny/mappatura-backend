@@ -36,66 +36,115 @@ const getStreetWithHamlet = (street, address) => {
   return street;
 };
 
+const getHouseNumber1Giga = (number, barred, km) => {
+    barred = barred.trim();
+    km = km.trim();
+    if(km.length > 0) {
+        number = `km. ${parseInt(km)}`;
+    } else if(barred.length > 0) {
+        if (barred !== "SNC") {
+            number = [number].concat(barred.split(/\s+/)).join("/");
+        } else {
+            number = barred;
+        }
+    }
+    return number;
+};
+
+const getStreetWithHamlet1Giga = (street, hamlet) => {
+    if (hamlet.length > 0) {
+        return street + " - " + hamlet;
+    }
+    return street;
+};
+
 (async () => {
   await db.sync();
 
   const chunkSize = 100000;
-  const files = fs.readdirSync(path.join(__dirname, "..", "csv/Consultazione2021"));
+  var dirs = ["Consultazione2021", "Bando1Giga"];
+  for (const dir of dirs) {
+      const files = fs.readdirSync(path.join(__dirname, "..", `csv/${dir}`));
 
-  console.log("begin processing Consultazione2021 CSV files...");
+      console.log(`begin processing ${dir} CSV files...`);
 
-  for (let file of files) {
-    if (file == ".keep") {
-      continue;
-    }
+      for (let file of files) {
+          if (file == ".keep") {
+              continue;
+          }
 
-    console.log(`begin reading of ${file}`);
+          console.log(`begin reading of ${file}`);
 
-    const readFile = fs.readFileSync(path.join(__dirname, "..", "csv/Consultazione2021", file));
+          const readFile = fs.readFileSync(path.join(__dirname, "..", `csv/${dir}`, file));
 
-    console.log("done");
-    console.log(`begin parsing of ${file}`);
+          console.log("done");
+          console.log(`begin parsing of ${file}`);
 
-    const parsedRecords = parse(readFile, {
-      skipEmptyLines: true,
-      bom: true,
-      delimiter: ";",
-      fromLine: 2,
-      onRecord: (record) => {
-        return [
-          Number(record[0]),
-          record[1],
-          record[2],
-          record[3],
-          getStreetWithHamlet(record[4], record[6]),
-          getHouseNumber(record[5], record[6]),
-          record[7],
-          Number(record[8]),
-          Number(record[9]),
-        ];
-      },
-    });
+          const parsedRecords = parse(readFile, {
+              skipEmptyLines: true,
+              bom: true,
+              delimiter: ";",
+              fromLine: 2,
+              onRecord: (record) => {
+                  return dir === "Bando1Giga" ? [
+                      Number(record[0]),
+                      record[1],
+                      record[2],
+                      record[3],
+                      getStreetWithHamlet1Giga(record[6], record[4]),
+                      getHouseNumber1Giga(record[7], record[8], record[9])
+                  ] : [
+                      Number(record[0]),
+                      record[1],
+                      record[2],
+                      record[3],
+                      getStreetWithHamlet(record[4], record[6]),
+                      getHouseNumber(record[5], record[6]),
+                      record[7],
+                      Number(record[8]),
+                      Number(record[9]),
+                  ];
+              },
+          });
 
-    console.log("done");
-    console.log(`begin writing ${file} to db`);
+          console.log("done");
+          console.log(`begin writing ${file} to db`);
 
-    for(let i = 0; i < parsedRecords.length; i += chunkSize) {
-      await Egon.bulkCreate(
-          parsedRecords.slice(i, i + chunkSize).map((record) => ({
-            egon: record[0],
-            region: record[1],
-            province: record[2],
-            city: record[3],
-            street: record[4],
-            number: record[5],
-            color: record[6],
-            peakSpeed: record[7],
-            below300Mbps: record[8],
-          })),
-      );
-    }
+          for (let i = 0; i < parsedRecords.length; i += chunkSize) {
+              if (dir === "Bando1Giga") {
+                  await Egon.bulkCreate(
+                      parsedRecords.slice(i, i + chunkSize).map((record) => ({
+                          egon: record[0],
+                          region: record[1],
+                          province: record[2],
+                          city: record[3],
+                          street: record[4],
+                          number: record[5],
+                          bando1Giga: true
+                      })),
+                      {
+                          updateOnDuplicate: ["bando1Giga"]
+                      }
+                  );
+              } else {
+                  await Egon.bulkCreate(
+                      parsedRecords.slice(i, i + chunkSize).map((record) => ({
+                          egon: record[0],
+                          region: record[1],
+                          province: record[2],
+                          city: record[3],
+                          street: record[4],
+                          number: record[5],
+                          color: record[6],
+                          peakSpeed: record[7],
+                          below300Mbps: record[8],
+                      })),
+                  );
+              }
+          }
 
-    console.log(`done processing ${file}`);
+          console.log(`done processing ${file}`);
+      }
+      console.log(`done processing ${dir} CSV files`);
   }
-  console.log("done processing Consultazione2021 CSV files");
 })();
