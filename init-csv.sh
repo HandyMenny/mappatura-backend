@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-ZIPFILE=("Consultazione2021.zip" "Bando1Giga-v1.zip" "Bando1Giga_TN_BZ-v2.zip")
+ZIPFILE=("Consultazione2021.zip" "Consultazione2021_bianche2016.zip" "Bando1Giga-v1.zip" "Bando1Giga_TN_BZ-v2.zip")
 DOWNLOAD_URL="https://media.githubusercontent.com/media/HandyMenny/database-infratel/main/"
-DIR=("csv/Consultazione2021"  "csv/Bando1Giga"  "csv/Bando1Giga")
+DIR=("csv/Consultazione2021" "csv/Consultazione2021Bianche"  "csv/Bando1Giga"  "csv/Bando1Giga")
 
 if ! command -v wget &>/dev/null; then
   echo "wget is not found on the system, you must install it to execute this script"
@@ -24,8 +24,8 @@ function download_extract() {
       rm "$file"
     done
   done
-  find $3/ ! -name "*.csv" -type f -delete
-  rm $3/header.csv
+  find $3/ ! -iname "*.csv" -type f -delete
+  rm -f $3/header.csv
 }
 
 

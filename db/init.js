@@ -62,7 +62,7 @@ const getStreetWithHamlet1Giga = (street, hamlet) => {
   await db.sync();
 
   const chunkSize = 100000;
-  var dirs = ["Consultazione2021", "Bando1Giga"];
+  var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga"];
   for (const dir of dirs) {
       const files = fs.readdirSync(path.join(__dirname, "..", `csv/${dir}`));
 
@@ -86,24 +86,40 @@ const getStreetWithHamlet1Giga = (street, hamlet) => {
               delimiter: ";",
               fromLine: 2,
               onRecord: (record) => {
-                  return dir === "Bando1Giga" ? [
-                      Number(record[0]),
-                      record[1],
-                      record[2],
-                      record[3],
-                      getStreetWithHamlet1Giga(record[6], record[4]),
-                      getHouseNumber1Giga(record[7], record[8], record[9])
-                  ] : [
-                      Number(record[0]),
-                      record[1],
-                      record[2],
-                      record[3],
-                      getStreetWithHamlet(record[4], record[6]),
-                      getHouseNumber(record[5], record[6]),
-                      record[7],
-                      Number(record[8]),
-                      Number(record[9]),
-                  ];
+                  if(dir === "Bando1Giga") {
+                      return [
+                          Number(record[0]),
+                          record[1],
+                          record[2],
+                          record[3],
+                          getStreetWithHamlet1Giga(record[6], record[4]),
+                          getHouseNumber1Giga(record[7], record[8], record[9])
+                      ]
+                  } else if (dir === "Consultazione2021Bianche") {
+                      return [
+                          Number(record[0]),
+                          record[1],
+                          record[2],
+                          record[3],
+                          record[4],
+                          record[5],
+                          '',
+                          Number(record[6]),
+                          Number(record[7]),
+                      ];
+                  } else {
+                      return [
+                          Number(record[0]),
+                          record[1],
+                          record[2],
+                          record[3],
+                          getStreetWithHamlet(record[4], record[6]),
+                          getHouseNumber(record[5], record[6]),
+                          record[7],
+                          Number(record[8]),
+                          Number(record[9]),
+                      ];
+                  }
               },
           });
 
@@ -123,7 +139,7 @@ const getStreetWithHamlet1Giga = (street, hamlet) => {
                           bando1Giga: true
                       })),
                       {
-                          updateOnDuplicate: ["bando1Giga"]
+                          updateOnDuplicate: ["bando1Giga", "street", "number"],
                       }
                   );
               } else {
