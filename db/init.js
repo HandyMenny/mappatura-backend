@@ -2,7 +2,7 @@ const parse = require("csv-parse/lib/sync");
 const path = require("path");
 const fs = require("fs");
 const db = require(path.join(__dirname));
-const { Egon } = require(path.join(__dirname, "Egon"));
+const { Egon, City } = require(path.join(__dirname, "Egon"));
 
 const getHouseNumber = (houseNumber, fullAddress) => {
   const splitIdx = fullAddress.lastIndexOf(",");
@@ -58,10 +58,30 @@ const getStreetWithHamlet1Giga = (street, hamlet) => {
     return street;
 };
 
+const cities = [];
+let cityCounter = 0;
+/*
+   Generate and id for the given city and stores the city in the cities array
+   The cities array will be used to import cities.
+ */
+const getCityId = (region, province, city) => {
+    const procity = province + city;
+    // Check if id already generated
+    if(!(procity in cities)) {
+        cities[procity] = {
+           id: cityCounter++,
+           region: region,
+           province: province,
+           name: city
+       };
+    }
+    return cities[procity].id;
+}
+
 (async () => {
   await db.sync();
 
-  const chunkSize = 100000;
+  const chunkSize = 200000;
   var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga"];
   for (const dir of dirs) {
       const files = fs.readdirSync(path.join(__dirname, "..", `csv/${dir}`));
@@ -89,18 +109,14 @@ const getStreetWithHamlet1Giga = (street, hamlet) => {
                   if(dir === "Bando1Giga") {
                       return [
                           Number(record[0]),
-                          record[1],
-                          record[2],
-                          record[3],
+                          getCityId(record[1], record[2], record[3]),
                           getStreetWithHamlet1Giga(record[6], record[4]),
                           getHouseNumber1Giga(record[7], record[8], record[9])
                       ]
                   } else if (dir === "Consultazione2021Bianche") {
                       return [
                           Number(record[0]),
-                          record[1],
-                          record[2],
-                          record[3],
+                          getCityId(record[1], record[2], record[3]),
                           record[4],
                           record[5],
                           '',
@@ -110,9 +126,7 @@ const getStreetWithHamlet1Giga = (street, hamlet) => {
                   } else {
                       return [
                           Number(record[0]),
-                          record[1],
-                          record[2],
-                          record[3],
+                          getCityId(record[1], record[2], record[3]),
                           getStreetWithHamlet(record[4], record[6]),
                           getHouseNumber(record[5], record[6]),
                           record[7],
@@ -122,20 +136,26 @@ const getStreetWithHamlet1Giga = (street, hamlet) => {
                   }
               },
           });
-
           console.log("done");
           console.log(`begin writing ${file} to db`);
+
+          // Import all cities - A bit naif but working
+          await City.bulkCreate(
+              Object.entries(cities).filter(([key, value]) => !value.imported).map(([key, value]) => {
+                  // Set imported to true, to avoid re-importing
+                  value.imported = true;
+                  return value;
+              })
+          );
 
           for (let i = 0; i < parsedRecords.length; i += chunkSize) {
               if (dir === "Bando1Giga") {
                   await Egon.bulkCreate(
                       parsedRecords.slice(i, i + chunkSize).map((record) => ({
                           egon: record[0],
-                          region: record[1],
-                          province: record[2],
-                          city: record[3],
-                          street: record[4],
-                          number: record[5],
+                          cityId: record[1],
+                          street: record[2],
+                          number: record[3],
                           bando1Giga: true
                       })),
                       {
@@ -146,14 +166,12 @@ const getStreetWithHamlet1Giga = (street, hamlet) => {
                   await Egon.bulkCreate(
                       parsedRecords.slice(i, i + chunkSize).map((record) => ({
                           egon: record[0],
-                          region: record[1],
-                          province: record[2],
-                          city: record[3],
-                          street: record[4],
-                          number: record[5],
-                          color: record[6],
-                          peakSpeed: record[7],
-                          below300Mbps: record[8],
+                          cityId: record[1],
+                          street: record[2],
+                          number: record[3],
+                          color: record[4],
+                          peakSpeed: record[5],
+                          below300Mbps: record[6],
                       })),
                   );
               }

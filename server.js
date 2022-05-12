@@ -5,7 +5,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const listEndpoints = require("express-list-endpoints");
 const db = require("./db");
-const { Egon } = require("./db/Egon");
+const { Egon, City } = require("./db/Egon");
 const regions = require("./regions.json");
 const { HTTPError, handleError } = require("./error");
 
@@ -50,13 +50,12 @@ const { HTTPError, handleError } = require("./error");
   // Cities query (by province).
   app.get("/:province/cities", async (req, res) => {
     try {
-      const cities = await Egon.findAll({
-        attributes: ["city"],
-        group: ["city"],
+      const cities = await City.findAll({
+        attributes: ["name"],
         where: { province: req.params.province },
       });
 
-      res.json(cities.map((obj) => obj.city));
+      res.json(cities.map((obj) => obj.name));
     } catch (error) {
       handleError(
         500,
@@ -73,9 +72,13 @@ const { HTTPError, handleError } = require("./error");
       const { province, city } = req.params;
 
       const streets = await Egon.findAll({
-        where: { province, city },
         attributes: ["street"],
         group: ["street"],
+        include: {
+          attributes: [],
+          model: City,
+          where: { province, name: city}
+        }
       });
 
       res.json(streets.map((obj) => obj.street));
@@ -89,8 +92,13 @@ const { HTTPError, handleError } = require("./error");
     try {
       const { province, city, street } = req.params;
       let numbers = await Egon.findAll({
-        where: { province, city, street },
+        where: { street },
         attributes: ["number", "egon"],
+        include: {
+          attributes: [],
+          model: City,
+          where: {province, name: city}
+        }
       });
 
       // Sort numbers.

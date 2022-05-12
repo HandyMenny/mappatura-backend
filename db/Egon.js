@@ -8,16 +8,8 @@ const Egon = db.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
     },
-    region: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    province: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    city: {
-      type: DataTypes.TEXT,
+    cityId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     street: {
@@ -46,10 +38,43 @@ const Egon = db.define(
   {
     timestamps: false,
     indexes: [
-      { unique: false, fields: ["province", "city"] },
-      { unique: false, fields: ["province", "city", "street"] },
+      { unique: false, fields: ["cityId", "street"] },
     ],
   },
 );
 
-module.exports = { Egon };
+const City = db.define(
+  "city",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+    },
+    region: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    province: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    }
+  },
+  {
+    timestamps: false,
+    indexes: [
+      { unique: true, fields: ["province", "name"] },
+    ],
+  },
+);
+
+Egon.belongsTo(City, {
+  foreignKey: "cityId",
+  onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE'
+});
+
+module.exports = { Egon, City };
