@@ -34,6 +34,12 @@ const Egon = db.define(
       allowNull: false,
       defaultValue: false,
     },
+    class19: {
+      type: DataTypes.TEXT,
+    },
+    class22: {
+      type: DataTypes.TEXT,
+    },
   },
   {
     timestamps: false,

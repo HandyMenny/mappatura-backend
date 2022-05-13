@@ -58,6 +58,39 @@ const getStreetWithHamlet1Giga = (street, hamlet) => {
     return street;
 };
 
+/*
+ * 1st letter '' = bianco, g = grigio, n = nero
+ * 2nd letter v = vhcn, '' or 'n' = no_vhcn
+ * 3rd letter r = rame, w = fwa, f = fo
+ *
+ * (compact to reduce db size)
+ */
+const getCompactClass = (classString) => {
+    switch (classString) {
+        case "bianco":
+        case "non_coperti":
+            return "";
+        case "grigio_novhcn_fwa":
+            return "gnw";
+        case "grigio_novhcn_rame":
+            return "gnr";
+        case "grigio_vhcn_fwa":
+            return "gvw";
+        case "grigio_vhcn_fo":
+            return "gvf";
+        case "grigio_vhcn_fo":
+            return "gvf";
+        case "nero_novhcn":
+            return "n";
+        case "nero_vhcn_fwa":
+            return "nvw";
+        case "nero_vhcn_fo":
+            return "nvf";
+        default:
+            throw `invalid value:${classString}`;
+    }
+}
+
 const cities = [];
 let cityCounter = 0;
 /*
@@ -82,7 +115,7 @@ const getCityId = (region, province, city) => {
   await db.sync();
 
   const chunkSize = 200000;
-  var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga"];
+  var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga", "Consultazione2020"];
   for (const dir of dirs) {
       const files = fs.readdirSync(path.join(__dirname, "..", `csv/${dir}`));
 
@@ -123,6 +156,15 @@ const getCityId = (region, province, city) => {
                           Number(record[6]),
                           Number(record[7]),
                       ];
+                  } else if(dir === "Consultazione2020") {
+                      return [
+                          Number(record[0]),
+                          getCityId(record[1], record[2].toUpperCase(), record[3]),
+                          getStreetWithHamlet1Giga(record[5], record[4]),
+                          getHouseNumber1Giga(record[6], record[7], record[8]),
+                          getCompactClass(record[13]),
+                          getCompactClass(record[14]),
+                      ]
                   } else {
                       return [
                           Number(record[0]),
@@ -160,6 +202,20 @@ const getCityId = (region, province, city) => {
                       })),
                       {
                           updateOnDuplicate: ["bando1Giga", "street", "number"],
+                      }
+                  );
+              } else if(dir === "Consultazione2020") {
+                  await Egon.bulkCreate(
+                      parsedRecords.slice(i, i + chunkSize).map((record) => ({
+                          egon: record[0],
+                          cityId: record[1],
+                          street: record[2],
+                          number: record[3],
+                          class19: record[4],
+                          class22: record[5]
+                      })),
+                      {
+                          updateOnDuplicate: ["class19", "class22"],
                       }
                   );
               } else {
