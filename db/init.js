@@ -136,8 +136,7 @@ const getWinner = (region) => {
       console.log(`begin processing ${dir} CSV files...`);
 
       for (let file of files) {
-          // rimini.csv has invalid egonids...
-          if (file == ".keep" || dir == "Consultazione2020" && file == "rimini.csv" ) {
+          if (file == ".keep") {
               continue;
           }
 
@@ -221,19 +220,34 @@ const getWinner = (region) => {
                       }
                   );
               } else if(dir === "Consultazione2020") {
-                  await Egon.bulkCreate(
-                      parsedRecords.slice(i, i + chunkSize).map((record) => ({
-                          egon: record[0],
-                          cityId: record[1],
-                          street: record[2],
-                          number: record[3],
-                          class19: record[4],
-                          class22: record[5]
-                      })),
-                      {
-                          updateOnDuplicate: ["class19", "class22"],
-                      }
-                  );
+                  // rimini.csv has invalid egonids...
+                  if (file == "rimini.csv") {
+                    for (let j = i; j < i + chunkSize; j++) {
+                      const record = parsedRecords[j];
+                      await Egon.update({
+                        class19: record[4],
+                        class22: record[5]
+                      }, {
+                        where: {cityId: record[1], street: record[2], number: record[3]},
+                        validate: false,
+                        logging: console.log
+                      })
+                    }
+                  } else {
+                    await Egon.bulkCreate(
+                        parsedRecords.slice(i, i + chunkSize).map((record) => ({
+                            egon: record[0],
+                            cityId: record[1],
+                            street: record[2],
+                            number: record[3],
+                            class19: record[4],
+                            class22: record[5]
+                        })),
+                        {
+                            updateOnDuplicate: ["class19", "class22"],
+                        }
+                    );
+                  }
               } else {
                   await Egon.bulkCreate(
                       parsedRecords.slice(i, i + chunkSize).map((record) => ({
