@@ -30,9 +30,9 @@ const Egon = db.define(
       type: DataTypes.INTEGER,
     },
     bando1Giga: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: 0,
     },
     class19: {
       type: DataTypes.TEXT,

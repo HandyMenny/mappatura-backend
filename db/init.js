@@ -111,6 +111,20 @@ const getCityId = (region, province, city) => {
     return cities[procity].id;
 }
 
+/* Return bando1Giga Winner
+   1 = OF
+   2 = TIM
+   3 =
+ */
+const getWinner = (region) => {
+  const of = ["CAMPANIA", "EMILIA-ROMAGNA", "FRIULI-VENEZIA GIULIA", "LAZIO", "LOMBARDIA", "PUGLIA", "SICILIA",
+    "TOSCANA", "VENETO"];
+  const tim = ["ABRUZZO", "BASILICATA", "CALABRIA", "LIGURIA", "MARCHE", "MOLISE", "PIEMONTE", "SARDEGNA", "UMBRIA",
+    "VALLE D'AOSTA"];
+  
+  return of.includes(region) ? 1 : tim.includes(region) ? 2 : 3;
+}
+
 (async () => {
   await db.sync();
 
@@ -145,7 +159,8 @@ const getCityId = (region, province, city) => {
                           Number(record[0]),
                           getCityId(record[1], record[2], record[3]),
                           getStreetWithHamlet1Giga(record[6], record[4]),
-                          getHouseNumber1Giga(record[7], record[8], record[9])
+                          getHouseNumber1Giga(record[7], record[8], record[9]),
+                          getWinner(record[1])
                       ]
                   } else if (dir === "Consultazione2021Bianche") {
                       return [
@@ -199,7 +214,7 @@ const getCityId = (region, province, city) => {
                           cityId: record[1],
                           street: record[2],
                           number: record[3],
-                          bando1Giga: true
+                          bando1Giga: record[4]
                       })),
                       {
                           updateOnDuplicate: ["bando1Giga", "street", "number"],
