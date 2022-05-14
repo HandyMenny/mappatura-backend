@@ -122,7 +122,8 @@ const getCityId = (region, province, city) => {
       console.log(`begin processing ${dir} CSV files...`);
 
       for (let file of files) {
-          if (file == ".keep") {
+          // rimini.csv has invalid egonids...
+          if (file == ".keep" || dir == "Consultazione2020" && file == "rimini.csv" ) {
               continue;
           }
 
