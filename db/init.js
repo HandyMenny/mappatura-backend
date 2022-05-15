@@ -127,6 +127,8 @@ const getWinner = (region) => {
 
 (async () => {
   await db.sync();
+  // Disable journaling
+  await db.query("PRAGMA journal_mode=OFF;");
 
   const chunkSize = 200000;
   var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga", "Consultazione2020"];
