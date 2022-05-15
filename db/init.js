@@ -130,6 +130,14 @@ const getWinner = (region) => {
 
   const chunkSize = 200000;
   var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga", "Consultazione2020"];
+
+  // Import cities from db
+  (await City.findAll()).forEach(it => {
+    it.imported = true
+    cities[it.province + it.name] = it;
+    cityCounter = it.id + 1;
+  });
+
   for (const dir of dirs) {
       const files = fs.readdirSync(path.join(__dirname, "..", `csv/${dir}`));
 
