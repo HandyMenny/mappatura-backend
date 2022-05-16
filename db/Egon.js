@@ -40,6 +40,15 @@ const Egon = db.define(
     class22: {
       type: DataTypes.TEXT,
     },
+    cat18: {
+      type: DataTypes.INTEGER,
+    },
+    cat21: {
+      type: DataTypes.INTEGER,
+    },
+    speed20: {
+      type: DataTypes.INTEGER,
+    },
   },
   {
     timestamps: false,

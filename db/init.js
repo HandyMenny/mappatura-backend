@@ -91,6 +91,23 @@ const getCompactClass = (classString) => {
     }
 }
 
+/*
+ * 100 = NGA VHCN
+ * 30 = NGA NO VHCN
+ * 0 = NO NGA
+ *
+ */
+const getSpeed = (catString) => {
+  switch (catString) {
+    case "NGA-VHCN":
+      return 100;
+    case "NGA":
+      return 30;
+    default:
+      return 0;
+  }
+}
+
 const cities = [];
 let cityCounter = 0;
 /*
@@ -131,7 +148,7 @@ const getWinner = (region) => {
   await db.query("PRAGMA journal_mode=OFF;");
 
   const chunkSize = 200000;
-  var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga", "Consultazione2020"];
+  var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga", "Consultazione2020", "Consultazione2019", "Consultazione2017"];
 
   // Import cities from db
   (await City.findAll()).forEach(it => {
@@ -191,6 +208,23 @@ const getWinner = (region) => {
                           getCompactClass(record[13]),
                           getCompactClass(record[14]),
                       ]
+                  } else if(dir === "Consultazione2019") {
+                    return [
+                      Number(record[0]),
+                      getCityId(record[1], record[2], record[3]),
+                      getStreetWithHamlet1Giga(`${record[9]} ${record[10]}`.trim(), record[4]),
+                      getHouseNumber1Giga(record[6], record[7], record[8].replace("KM.", "").replace(",", "")),
+                      getSpeed(record[16]),
+                      getSpeed(record[17]),
+                    ]
+                  } else if(dir === "Consultazione2017") {
+                    return [
+                      Number(record[0]),
+                      getCityId(record[1], record[2], record[3]),
+                      getStreetWithHamlet1Giga(`${record[10]} ${record[11]}`.trim(), record[4]),
+                      getHouseNumber1Giga(record[6], record[7], record[8].replace("KM.", "").replace(",", "")),
+                      getSpeed(record[17]),
+                    ]
                   } else {
                       return [
                           Number(record[0]),
@@ -258,6 +292,33 @@ const getWinner = (region) => {
                         }
                     );
                   }
+              } else if(dir === "Consultazione2019") {
+                await Egon.bulkCreate(
+                  parsedRecords.slice(i, i + chunkSize).map((record) => ({
+                    egon: record[0],
+                    cityId: record[1],
+                    street: record[2],
+                    number: record[3],
+                    cat18: record[4],
+                    cat21: record[5]
+                  })),
+                  {
+                    updateOnDuplicate: ["cat18", "cat21"],
+                  }
+                );
+              } else if(dir === "Consultazione2017") {
+                await Egon.bulkCreate(
+                  parsedRecords.slice(i, i + chunkSize).map((record) => ({
+                    egon: record[0],
+                    cityId: record[1],
+                    street: record[2],
+                    number: record[3],
+                    speed20: record[4],
+                  })),
+                  {
+                    updateOnDuplicate: ["speed20"],
+                  }
+                );
               } else {
                   await Egon.bulkCreate(
                       parsedRecords.slice(i, i + chunkSize).map((record) => ({
