@@ -232,15 +232,14 @@ const getWinner = (region) => {
               } else if(dir === "Consultazione2020") {
                   // rimini.csv has invalid egonids...
                   if (file == "rimini.csv") {
-                    for (let j = i; j < i + chunkSize; j++) {
+                    for (let j = i; j < i + chunkSize && j < parsedRecords.length; j++) {
                       const record = parsedRecords[j];
                       await Egon.update({
                         class19: record[4],
                         class22: record[5]
                       }, {
                         where: {cityId: record[1], street: record[2], number: record[3]},
-                        validate: false,
-                        logging: console.log
+                        validate: false
                       })
                     }
                   } else {
