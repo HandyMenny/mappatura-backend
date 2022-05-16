@@ -148,7 +148,7 @@ const getWinner = (region) => {
   await db.query("PRAGMA journal_mode=OFF;");
 
   const chunkSize = 200000;
-  var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga", "Consultazione2020", "Consultazione2019", "Consultazione2017"];
+  var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche"];
 
   // Import cities from db
   (await City.findAll()).forEach(it => {
@@ -223,7 +223,15 @@ const getWinner = (region) => {
                       getCityId(record[1], record[2], record[3]),
                       getStreetWithHamlet1Giga(`${record[10]} ${record[11]}`.trim(), record[4]),
                       getHouseNumber1Giga(record[6], record[7], record[8].replace("KM.", "").replace(",", "")),
-                      getSpeed(record[17]),
+                      Number(record[17]),
+                    ]
+                  } else if(dir === "Consultazione2017Bianche") {
+                    return [
+                      Number(record[0]),
+                      getCityId(record[1], record[2], record[3]),
+                      getStreetWithHamlet1Giga(`${record[9]} ${record[10]}`.trim(), record[4]),
+                      getHouseNumber1Giga(record[6], record[7], record[8].replace("KM.", "").replace(",", "")),
+                      Number(record[16]),
                     ]
                   } else {
                       return [
@@ -306,7 +314,7 @@ const getWinner = (region) => {
                     updateOnDuplicate: ["cat18", "cat21"],
                   }
                 );
-              } else if(dir === "Consultazione2017") {
+              } else if(dir === "Consultazione2017" || dir === "Consultazione2017Bianche") {
                 await Egon.bulkCreate(
                   parsedRecords.slice(i, i + chunkSize).map((record) => ({
                     egon: record[0],
