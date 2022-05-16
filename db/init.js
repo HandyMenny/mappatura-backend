@@ -162,6 +162,7 @@ const getWinner = (region) => {
               bom: true,
               delimiter: ";",
               fromLine: 2,
+              trim: true,
               onRecord: (record) => {
                   if(dir === "Bando1Giga") {
                       return [
