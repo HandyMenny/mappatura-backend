@@ -195,7 +195,7 @@ const getWinner = (region) => {
                           getCityId(record[1], record[2], record[3]),
                           record[4],
                           record[5],
-                          '',
+                          null,
                           Number(record[6]),
                           Number(record[7]),
                       ];
