@@ -19,7 +19,10 @@ const getHouseNumber = (houseNumber, fullAddress) => {
      number.unshift(houseNumber);
    }
    number = number.join("/");
- }
+  }
+  if (number == 0) {
+    number = "SNC";
+  }
 
   return number;
 };
@@ -47,6 +50,9 @@ const getHouseNumber1Giga = (number, barred, km) => {
         } else {
             number = barred;
         }
+    }
+    if (number == 0) {
+      number = "SNC";
     }
     return number;
 };
