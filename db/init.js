@@ -213,7 +213,7 @@ const getWinner = (region) => {
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
                       getStreetWithHamlet1Giga(`${record[9]} ${record[10]}`.trim(), record[4]),
-                      getHouseNumber1Giga(record[6], record[7], record[8].replace("KM.", "").replace(",", "")),
+                      getHouseNumber1Giga(record[13], record[14], record[15].replace("KM.", "").replace(",", "")),
                       getSpeed(record[16]),
                       getSpeed(record[17]),
                     ]
@@ -222,7 +222,7 @@ const getWinner = (region) => {
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
                       getStreetWithHamlet1Giga(`${record[10]} ${record[11]}`.trim(), record[4]),
-                      getHouseNumber1Giga(record[6], record[7], record[8].replace("KM.", "").replace(",", "")),
+                      getHouseNumber1Giga(record[14], record[15], record[16].replace("KM.", "").replace(",", "")),
                       Number(record[17]),
                     ]
                   } else if(dir === "Consultazione2017Bianche") {
@@ -230,7 +230,7 @@ const getWinner = (region) => {
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
                       getStreetWithHamlet1Giga(`${record[9]} ${record[10]}`.trim(), record[4]),
-                      getHouseNumber1Giga(record[6], record[7], record[8].replace("KM.", "").replace(",", "")),
+                      getHouseNumber1Giga(record[13], record[14], record[15].replace("KM.", "").replace(",", "")),
                       Number(record[16]),
                     ]
                   } else {
