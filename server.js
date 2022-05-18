@@ -22,8 +22,8 @@ const { HTTPError, handleError } = require("./error");
   app.set("trust proxy", 1);
   app.use(
     rateLimit({
-      windowMs: 10 * 60 * 1000,
-      max: 100,
+      windowMs: 60 * 1000,
+      max: 200,
       handler: (req, res) => handleError(429, "too many requests", res),
     })
   );
