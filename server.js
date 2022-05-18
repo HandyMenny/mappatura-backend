@@ -8,12 +8,14 @@ const db = require("./db");
 const { Egon, City } = require("./db/Egon");
 const regions = require("./regions.json");
 const { HTTPError, handleError } = require("./error");
+const cache = require("./db/cache");
 
 (async () => {
   const app = express();
 
   await db.sync();
   console.log("connected to db");
+  await cache.initialize();
 
   app.use(express.json());
   app.use(morgan("tiny"));
@@ -50,12 +52,15 @@ const { HTTPError, handleError } = require("./error");
   // Cities query (by province).
   app.get("/:province/cities", async (req, res) => {
     try {
-      const cities = await City.findAll({
-        attributes: ["name"],
-        where: { province: req.params.province },
-      });
-
-      res.json(cities.map((obj) => obj.name));
+      const data = await cache.getOrQuery(req.params.province, 36000,
+        async () => {
+        const cities = await City.findAll({
+          attributes: ["name"],
+          where: { province: req.params.province },
+        });
+        return cities.map((obj) => obj.name);
+      })
+      res.json(data)
     } catch (error) {
       handleError(
         500,
@@ -70,18 +75,20 @@ const { HTTPError, handleError } = require("./error");
   app.get("/:province/:city/streets", async (req, res) => {
     try {
       const { province, city } = req.params;
-
-      const streets = await Egon.findAll({
-        attributes: ["street"],
-        group: ["street"],
-        include: {
-          attributes: [],
-          model: City,
-          where: { province, name: city}
-        }
-      });
-
-      res.json(streets.map((obj) => obj.street));
+      const data = await cache.getOrQuery(`${province}|${city}`, 18000,
+        async () => {
+          const streets = await Egon.findAll({
+            attributes: ["street"],
+            group: ["street"],
+            include: {
+              attributes: [],
+              model: City,
+              where: {province, name: city}
+            }
+          });
+          return streets.map((obj) => obj.street);
+        });
+      res.json(data);
     } catch (error) {
       handleError(500, "error retrieving streets for the provided city", res);
     }
@@ -91,38 +98,41 @@ const { HTTPError, handleError } = require("./error");
   app.get("/:province/:city/:street/numbers", async (req, res) => {
     try {
       const { province, city, street } = req.params;
-      let numbers = await Egon.findAll({
-        where: { street },
-        attributes: ["number", "egon"],
-        include: {
-          attributes: [],
-          model: City,
-          where: {province, name: city}
-        }
-      });
+      const data = await cache.getOrQuery(`${province}|${city}|${street}`, 3600,
+        async () => {
+          let numbers = await Egon.findAll({
+            where: { street },
+            attributes: ["number", "egon"],
+            include: {
+              attributes: [],
+              model: City,
+              where: {province, name: city}
+            }
+          });
 
-      // Sort numbers.
-      numbers
-        .sort((a, b) => {
-          if (a.number === "SNC") {
-            return -1;
-          }
-          if (b.number === "SNC") {
-            return 1;
-          }
-          return (
-            a.number.length - b.number.length ||
-            a.number.localeCompare(b.number)
-          );
-        })
-        .sort((a, b) => {
-          const aNum = Number(a.number.split("/")[0]);
-          const bNum = Number(b.number.split("/")[0]);
+          // Sort numbers.
+          numbers
+            .sort((a, b) => {
+              if (a.number === "SNC") {
+                return -1;
+              }
+              if (b.number === "SNC") {
+                return 1;
+              }
+              return (
+                a.number.length - b.number.length ||
+                a.number.localeCompare(b.number)
+              );
+            })
+            .sort((a, b) => {
+              const aNum = Number(a.number.split("/")[0]);
+              const bNum = Number(b.number.split("/")[0]);
 
-          return aNum - bNum;
+              return aNum - bNum;
+            });
+          return numbers;
         });
-
-      res.json(numbers);
+      res.json(data);
     } catch (error) {
       handleError(500, "error retrieving numbers for this street", res);
     }
@@ -135,9 +145,12 @@ const { HTTPError, handleError } = require("./error");
         throw new HTTPError(400, "you must provide the egon id");
       }
 
-      const data = await Egon.findOne({
-        where: { egon: req.query.id },
-      });
+      const data = await cache.getOrQuery(req.query.id, 900,
+        async () => {
+          return await Egon.findOne({
+            where: { egon: req.query.id },
+          });
+        });
 
       if (!data) {
         throw new HTTPError(404, "no data available for this egon");
