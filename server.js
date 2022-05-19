@@ -58,6 +58,7 @@ const { superscript } = require("./util");
         const cities = await City.findAll({
           attributes: ["name"],
           where: { province: req.params.province },
+          raw: true,
         });
         return cities.map((obj) => obj.name);
       })
@@ -85,7 +86,8 @@ const { superscript } = require("./util");
               attributes: [],
               model: City,
               where: {province, name: city}
-            }
+            },
+            raw: true,
           });
           return streets.map((obj) => obj.street);
         });
@@ -108,7 +110,8 @@ const { superscript } = require("./util");
               attributes: [],
               model: City,
               where: {province, name: city}
-            }
+            },
+            raw: true
           });
 
           // Sort numbers.
@@ -161,6 +164,8 @@ const { superscript } = require("./util");
         async () => {
           return await Egon.findOne({
             where: { egon: req.query.id },
+            raw: true,
+            plain: true
           });
         });
 
