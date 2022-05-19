@@ -13,22 +13,22 @@ const cache = {
     }
   },
   getOrQuery: async (key, expire, queryFunc) => {
-    let json, data;
+    let json;
     try {
       json = await client.get(key);
     } catch(err) {
       console.log(err);
     }
     if (json) {
-      data = JSON.parse(json);
       client.expire(key, expire);
     } else {
-      data = await queryFunc();
-      client.set(key, JSON.stringify(data), {
+      const data = await queryFunc();
+      json = JSON.stringify(data);
+      client.set(key, json, {
         EX: expire,
       });
     }
-    return data;
+    return json;
   }
 }
 

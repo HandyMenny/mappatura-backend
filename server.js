@@ -62,7 +62,8 @@ const { superscript } = require("./util");
         });
         return cities.map((obj) => obj.name);
       })
-      res.json(data)
+      res.setHeader('Content-Type', 'application/json');
+      res.send(data);
     } catch (error) {
       handleError(
         500,
@@ -91,7 +92,8 @@ const { superscript } = require("./util");
           });
           return streets.map((obj) => obj.street);
         });
-      res.json(data);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(data);
     } catch (error) {
       handleError(500, "error retrieving streets for the provided city", res);
     }
@@ -147,7 +149,8 @@ const { superscript } = require("./util");
           }
           return numbers;
         });
-      res.json(data);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(data);
     } catch (error) {
       handleError(500, "error retrieving numbers for this street", res);
     }
@@ -173,7 +176,8 @@ const { superscript } = require("./util");
         throw new HTTPError(404, "no data available for this egon");
       }
 
-      res.json(data);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(data);
     } catch (error) {
       handleError(
         error.statusCode || 500,
