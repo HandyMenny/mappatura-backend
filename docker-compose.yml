@@ -5,12 +5,14 @@ networks:
     external: true
 
 services:
-  mappatura2021-backend:
-    container_name: mappatura2021-backend
+  mappatura-backend:
+    container_name: mappatura-backend
     volumes:
       - "./db.sqlite:/usr/src/app/db.sqlite"
     networks:
       - proxy
-    image: theedoran/mappatura2021-backend:latest
+    image: handymenny/mappatura-backend:latest
     init: true
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:5000:5000"

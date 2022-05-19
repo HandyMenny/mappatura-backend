@@ -17,14 +17,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: theedoran/${{ github.event.repository.name }}
+          images: handymenny/${{ github.event.repository.name }}
           tags: |
             type=raw,value=latest
             type=sha,format=long,prefix=
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
-          username: theedoran
+          username: handymenny
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build image and push on Docker Hub
