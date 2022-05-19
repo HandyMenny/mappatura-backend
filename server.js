@@ -113,6 +113,9 @@ const cache = require("./db/cache");
           // Sort numbers.
           numbers
             .sort((a, b) => {
+              if(a.number === b.number) {
+                return 0;
+              }
               if (a.number === "SNC") {
                 return -1;
               }
@@ -120,16 +123,10 @@ const cache = require("./db/cache");
                 return 1;
               }
               return (
-                a.number.length - b.number.length ||
+                Number(a.number.split("/")[0]) - Number(b.number.split("/")[0]) ||
                 a.number.localeCompare(b.number)
               );
             })
-            .sort((a, b) => {
-              const aNum = Number(a.number.split("/")[0]);
-              const bNum = Number(b.number.split("/")[0]);
-
-              return aNum - bNum;
-            });
           return numbers;
         });
       res.json(data);
