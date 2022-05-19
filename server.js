@@ -9,6 +9,7 @@ const { Egon, City } = require("./db/Egon");
 const regions = require("./regions.json");
 const { HTTPError, handleError } = require("./error");
 const cache = require("./db/cache");
+const { superscript } = require("./util");
 
 (async () => {
   const app = express();
@@ -127,6 +128,20 @@ const cache = require("./db/cache");
                 a.number.localeCompare(b.number)
               );
             })
+          let lastNum;
+          let dupCounter = 0;
+          for(let i = 0; i < numbers.length; i++) {
+            const num = numbers[i];
+            if (num.number === "0") {
+              num.number = "SNC";
+            }
+            if (num.number === lastNum) {
+              num.number += ` ${superscript(++dupCounter)}`;
+            } else {
+              lastNum = num.number;
+              dupCounter = 0;
+            }
+          }
           return numbers;
         });
       res.json(data);
