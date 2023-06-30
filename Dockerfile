@@ -8,4 +8,4 @@ COPY --chown=node:node package*.json ./
 RUN npm ci 
 COPY --chown=node:node . .
 EXPOSE 5000
-CMD redis-server & node server.js
+CMD redis-server --save "" --appendonly no & node server.js
