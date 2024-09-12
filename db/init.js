@@ -9,8 +9,8 @@ const getHouseNumber = (houseNumber, fullAddress) => {
   let number = fullAddress.substring(splitIdx + 1).split(/[ ]+/).slice(1);
 
   if(houseNumber === "0" && number.length === 1 && houseNumber !== number[0]) {
-    /* houseNumber (0) is appended to number */
-    number = `km. ${number[0]/10}`;
+    /* houseNumber (0) is appended to number and unit is meters */
+    number = `km. ${number[0]/10000}`;
   } else {
    // Last element is houseNumber
    number.pop();
@@ -38,9 +38,9 @@ const getStreetWithHamlet = (street, address) => {
 
 const getHouseNumberSplit = (number, barred, km) => {
     barred = barred.trim();
-    km = km.trim();
-    if(km.length > 0) {
-        number = `km. ${parseInt(km)}`;
+    km = parseFloat(km)
+    if(!Number.isNaN(km) && km > 0) {
+        number = `km. ${km}`;
     } else if(barred.length > 0) {
         if (barred !== "SNC") {
             number = [number].concat(barred.split(/\s+/)).join("/");
@@ -186,7 +186,7 @@ const getWinner = (region) => {
                           Number(record[0]),
                           getCityId(record[1], record[2], record[3]),
                           getStreetWithHamletSplit(record[6], record[4]),
-                          getHouseNumberSplit(record[7], record[8], record[9]),
+                          getHouseNumberSplit(record[7], record[8], record[9]/1000),
                           getWinner(record[1])
                       ]
                   } else if (dir === "Consultazione2021Bianche") {
@@ -213,7 +213,7 @@ const getWinner = (region) => {
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
                       getStreetWithHamletSplit(`${record[9]} ${record[10]}`.trim(), record[4]),
-                      getHouseNumberSplit(record[13], record[14], record[15].replace("KM.", "").replace(",", "")),
+                      getHouseNumberSplit(record[13], record[14], record[15].replace("KM.", "").replace(",", ".")),
                       getSpeed(record[16]),
                       getSpeed(record[17]),
                     ]
@@ -222,7 +222,7 @@ const getWinner = (region) => {
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
                       getStreetWithHamletSplit(`${record[10]} ${record[11]}`.trim(), record[4]),
-                      getHouseNumberSplit(record[14], record[15], record[16].replace("KM.", "").replace(",", "")),
+                      getHouseNumberSplit(record[14], record[15], record[16].replace("KM.", "").replace(",", ".")),
                       Number(record[17]),
                     ]
                   } else if(dir === "Consultazione2017Bianche") {
@@ -230,7 +230,7 @@ const getWinner = (region) => {
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
                       getStreetWithHamletSplit(`${record[9]} ${record[10]}`.trim(), record[4]),
-                      getHouseNumberSplit(record[13], record[14], record[15].replace("KM.", "").replace(",", "")),
+                      getHouseNumberSplit(record[13], record[14], record[15].replace("KM.", "").replace(",", ".")),
                       Number(record[16]),
                     ]
                   } else {
