@@ -20,33 +20,34 @@ const Egon = db.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    color: {
-      type: DataTypes.TEXT,
-    },
-    peakSpeed: {
-      type: DataTypes.INTEGER,
-    },
-    below300Mbps: {
-      type: DataTypes.INTEGER,
-    },
-    bando1Giga: {
+    // 0 = not included, 1 = OF, 2 = TIM
+    status_p1g: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
     },
-    class19: {
+    color_2021: {
       type: DataTypes.TEXT,
     },
-    class22: {
+    peakSpeed_2021: {
+      type: DataTypes.INTEGER,
+    },
+    below300Mbps_2021: {
+      type: DataTypes.INTEGER,
+    },
+    class19_2020: {
       type: DataTypes.TEXT,
     },
-    cat18: {
+    class22_2020: {
+      type: DataTypes.TEXT,
+    },
+    cat18_2019: {
       type: DataTypes.INTEGER,
     },
-    cat21: {
+    cat21_2019: {
       type: DataTypes.INTEGER,
     },
-    speed20: {
+    speed20_2017: {
       type: DataTypes.INTEGER,
     },
   },
