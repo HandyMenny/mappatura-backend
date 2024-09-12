@@ -26,6 +26,10 @@ const Egon = db.define(
       allowNull: false,
       defaultValue: 0,
     },
+    walkin_connetti: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
     color_2021: {
       type: DataTypes.TEXT,
     },

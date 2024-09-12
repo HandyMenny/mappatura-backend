@@ -36,6 +36,44 @@ const getStreetWithHamlet = (street, address) => {
   return street;
 };
 
+
+const getStreetConnetti = (fullAddress) => {
+  const splitted = fullAddress.split(",");
+  
+  return splitted[0].trim();
+}
+
+
+const getHouseNumberConnetti = (fullAddress) => {
+  // address, houseNumber, km/barred
+  const splitted = fullAddress.split(",");
+
+  if (splitted.length < 2) return "SNC";
+
+  let houseNumber = splitted[1].trim();
+
+  if (splitted.length < 3) return houseNumber;
+
+  const exponent = splitted[2].trim().split(/\s+/)
+
+  if (exponent[0] === "SNC") {
+    // snc case
+    return "SNC";
+  }
+
+  if (houseNumber === "0" && exponent.length === 1) {
+    // km case
+    houseNumber = `km. ${exponent[0]/1000}`;
+  } else { 
+    // barred case
+    exponent.unshift(houseNumber);
+    // join 
+    houseNumber = exponent.join("/");
+ }
+
+  return houseNumber;
+};
+
 const getHouseNumberSplit = (number, barred, km) => {
     barred = barred.trim();
     km = parseFloat(km)
@@ -57,6 +95,16 @@ const getStreetWithHamletSplit = (street, hamlet) => {
     }
     return street;
 };
+
+const normalizeRegionConnetti = (region) => {
+  switch (region) {
+    case "BOLZANO" :
+    case "TRENTO":
+      return "TRENTINO-ALTO ADIGE";
+    default:
+      return region;
+  }
+}
 
 /*
  * 1st letter '' = bianco, g = grigio, n = nero
@@ -108,6 +156,23 @@ const getSpeed = (catString) => {
   }
 }
 
+const getWalkinStatus = (status) => {
+  switch (status) {
+    case "Esistente":
+      return 1;
+    case "Inesistente":
+      return 2;
+    case "Escluso privo di UI":
+      return 3;
+    case "Escluso per 10%": 
+      return 4;
+    case "Escluso perché già coperto": 
+      return 5;
+    default:
+      return 0;
+  }
+}
+
 const cities = [];
 let cityCounter = 0;
 /*
@@ -148,7 +213,7 @@ const getWinner = (region) => {
   await db.query("PRAGMA journal_mode=OFF;");
 
   const chunkSize = 200000;
-  var dirs = ["Bando1Giga", "Consultazione2021", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche", "Consultazione2021Bianche"];
+  var dirs = ["Bando1Giga", "Consultazione2021", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche", "OpenDataConnetti20240101", "Consultazione2021Bianche"];
 
   // Import cities from db
   (await City.findAll()).forEach(it => {
@@ -174,10 +239,12 @@ const getWinner = (region) => {
           console.log("done");
           console.log(`begin parsing of ${file}`);
 
+          const delimiter = dir.startsWith("OpenDataConnetti") ? "," : ";";
+
           const parsedRecords = parse(readFile, {
               skipEmptyLines: true,
               bom: true,
-              delimiter: ";",
+              delimiter: delimiter,
               fromLine: 2,
               trim: true,
               onRecord: (record) => {
@@ -233,6 +300,17 @@ const getWinner = (region) => {
                       getHouseNumberSplit(record[13], record[14], record[15].replace("KM.", "").replace(",", ".")),
                       Number(record[16]),
                     ]
+                  } else if (dir.startsWith("OpenDataConnetti")) {
+                    const piano = record[0]
+                    if (piano != "piano-italia-1-giga") return [];
+
+                    return [
+                      Number(record[1]),
+                      getCityId(normalizeRegionConnetti(record[3]), record[4], record[5]),
+                      getStreetConnetti(record[9]),
+                      getHouseNumberConnetti(record[9]),
+                      getWalkinStatus(record[11])
+                    ];
                   } else {
                       return [
                           Number(record[0]),
@@ -258,7 +336,7 @@ const getWinner = (region) => {
               })
           );
 
-          for (let i = 0; i < parsedRecords.length; i += chunkSize) {
+          for (let i = 0; i < parsedRecords.length; i += chunkSize) {     
               if (dir === "Bando1Giga") {
                   await Egon.bulkCreate(
                       parsedRecords.slice(i, i + chunkSize).map((record) => ({
@@ -322,6 +400,21 @@ const getWinner = (region) => {
                   })),
                   {
                     updateOnDuplicate: ["speed20_2017"],
+                  }
+                );
+              } else if (dir.startsWith("OpenDataConnetti")) {
+                await Egon.bulkCreate(
+                  parsedRecords.slice(i, i + chunkSize)
+                  .filter((record) => record.length > 0)
+                  .map((record) => ({
+                    egon: record[0],
+                    cityId: record[1],
+                    street: record[2],
+                    number: record[3],
+                    walkin_connetti: record[4],
+                  })),
+                  {
+                    updateOnDuplicate: ["walkin_connetti"],
                   }
                 );
               } else {
