@@ -36,7 +36,7 @@ const getStreetWithHamlet = (street, address) => {
   return street;
 };
 
-const getHouseNumber1Giga = (number, barred, km) => {
+const getHouseNumberSplit = (number, barred, km) => {
     barred = barred.trim();
     km = km.trim();
     if(km.length > 0) {
@@ -51,7 +51,7 @@ const getHouseNumber1Giga = (number, barred, km) => {
     return number;
 };
 
-const getStreetWithHamlet1Giga = (street, hamlet) => {
+const getStreetWithHamletSplit = (street, hamlet) => {
     if (hamlet.length > 0) {
         return street + " - " + hamlet;
     }
@@ -185,8 +185,8 @@ const getWinner = (region) => {
                       return [
                           Number(record[0]),
                           getCityId(record[1], record[2], record[3]),
-                          getStreetWithHamlet1Giga(record[6], record[4]),
-                          getHouseNumber1Giga(record[7], record[8], record[9]),
+                          getStreetWithHamletSplit(record[6], record[4]),
+                          getHouseNumberSplit(record[7], record[8], record[9]),
                           getWinner(record[1])
                       ]
                   } else if (dir === "Consultazione2021Bianche") {
@@ -203,8 +203,8 @@ const getWinner = (region) => {
                       return [
                           Number(record[0]),
                           getCityId(record[1], record[2].toUpperCase(), record[3]),
-                          getStreetWithHamlet1Giga(record[5], record[4]),
-                          getHouseNumber1Giga(record[6], record[7], record[8]),
+                          getStreetWithHamletSplit(record[5], record[4]),
+                          getHouseNumberSplit(record[6], record[7], record[8]),
                           getCompactClass(record[13]),
                           getCompactClass(record[14]),
                       ]
@@ -212,8 +212,8 @@ const getWinner = (region) => {
                     return [
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
-                      getStreetWithHamlet1Giga(`${record[9]} ${record[10]}`.trim(), record[4]),
-                      getHouseNumber1Giga(record[13], record[14], record[15].replace("KM.", "").replace(",", "")),
+                      getStreetWithHamletSplit(`${record[9]} ${record[10]}`.trim(), record[4]),
+                      getHouseNumberSplit(record[13], record[14], record[15].replace("KM.", "").replace(",", "")),
                       getSpeed(record[16]),
                       getSpeed(record[17]),
                     ]
@@ -221,16 +221,16 @@ const getWinner = (region) => {
                     return [
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
-                      getStreetWithHamlet1Giga(`${record[10]} ${record[11]}`.trim(), record[4]),
-                      getHouseNumber1Giga(record[14], record[15], record[16].replace("KM.", "").replace(",", "")),
+                      getStreetWithHamletSplit(`${record[10]} ${record[11]}`.trim(), record[4]),
+                      getHouseNumberSplit(record[14], record[15], record[16].replace("KM.", "").replace(",", "")),
                       Number(record[17]),
                     ]
                   } else if(dir === "Consultazione2017Bianche") {
                     return [
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
-                      getStreetWithHamlet1Giga(`${record[9]} ${record[10]}`.trim(), record[4]),
-                      getHouseNumber1Giga(record[13], record[14], record[15].replace("KM.", "").replace(",", "")),
+                      getStreetWithHamletSplit(`${record[9]} ${record[10]}`.trim(), record[4]),
+                      getHouseNumberSplit(record[13], record[14], record[15].replace("KM.", "").replace(",", "")),
                       Number(record[16]),
                     ]
                   } else {
