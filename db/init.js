@@ -266,10 +266,10 @@ const getWinner = (region) => {
                           cityId: record[1],
                           street: record[2],
                           number: record[3],
-                          bando1Giga: record[4]
+                          status_p1g: record[4]
                       })),
                       {
-                          updateOnDuplicate: ["bando1Giga", "street", "number"],
+                          updateOnDuplicate: ["status_p1g", "street", "number"],
                       }
                   );
               } else if(dir === "Consultazione2020") {
@@ -278,8 +278,8 @@ const getWinner = (region) => {
                     for (let j = i; j < i + chunkSize && j < parsedRecords.length; j++) {
                       const record = parsedRecords[j];
                       await Egon.update({
-                        class19: record[4],
-                        class22: record[5]
+                        class19_2020: record[4],
+                        class22_2020: record[5]
                       }, {
                         where: {cityId: record[1], street: record[2], number: record[3]},
                         validate: false
@@ -292,11 +292,11 @@ const getWinner = (region) => {
                             cityId: record[1],
                             street: record[2],
                             number: record[3],
-                            class19: record[4],
-                            class22: record[5]
+                            class19_2020: record[4],
+                            class22_2020: record[5]
                         })),
                         {
-                            updateOnDuplicate: ["class19", "class22"],
+                            updateOnDuplicate: ["class19_2020", "class22_2020"],
                         }
                     );
                   }
@@ -307,11 +307,11 @@ const getWinner = (region) => {
                     cityId: record[1],
                     street: record[2],
                     number: record[3],
-                    cat18: record[4],
-                    cat21: record[5]
+                    cat18_2019: record[4],
+                    cat21_2019: record[5]
                   })),
                   {
-                    updateOnDuplicate: ["cat18", "cat21"],
+                    updateOnDuplicate: ["cat18_2019", "cat21_2019"],
                   }
                 );
               } else if(dir === "Consultazione2017" || dir === "Consultazione2017Bianche") {
@@ -321,10 +321,10 @@ const getWinner = (region) => {
                     cityId: record[1],
                     street: record[2],
                     number: record[3],
-                    speed20: record[4],
+                    speed20_2017: record[4],
                   })),
                   {
-                    updateOnDuplicate: ["speed20"],
+                    updateOnDuplicate: ["speed20_2017"],
                   }
                 );
               } else {
@@ -334,9 +334,9 @@ const getWinner = (region) => {
                           cityId: record[1],
                           street: record[2],
                           number: record[3],
-                          color: record[4],
-                          peakSpeed: record[5],
-                          below300Mbps: record[6],
+                          color_2021: record[4],
+                          peakSpeed_2021: record[5],
+                          below300Mbps_2021: record[6],
                       })),
                   );
               }
