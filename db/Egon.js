@@ -20,7 +20,7 @@ const Egon = db.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    // 0 = not included, 1 = OF, 2 = TIM
+    // 0 = not included, 1 = OF, 2 = TIM, 3 = consultazione prossimità
     status_p1g: {
       type: DataTypes.INTEGER,
       allowNull: false,

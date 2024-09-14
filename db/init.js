@@ -213,7 +213,7 @@ const getWinner = (region) => {
   await db.query("PRAGMA journal_mode=OFF;");
 
   const chunkSize = 200000;
-  var dirs = ["Bando1Giga", "Consultazione2021", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche", "OpenDataConnetti20240101", "Consultazione2021Bianche"];
+  var dirs = ["Bando1Giga", "QuestionarioConsultazione2024", "Consultazione2021", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche", "OpenDataConnetti20240101", "Consultazione2021Bianche"];
 
   // Import cities from db
   (await City.findAll()).forEach(it => {
@@ -310,6 +310,14 @@ const getWinner = (region) => {
                       getStreetConnetti(record[9]),
                       getHouseNumberConnetti(record[9]),
                       getWalkinStatus(record[11])
+                    ];
+                  } else if (dir === "QuestionarioConsultazione2024") {
+                    return [
+                      Number(record[0]),
+                      getCityId(record[1], record[2], record[3]),
+                      getStreetWithHamletSplit(record[6], record[4]),
+                      getHouseNumberSplit(record[7], record[8], (record[9].replace("KM", ""))/1000),
+                      3 // 3 = in consultazione civico prossimità
                     ];
                   } else {
                       return [
@@ -415,6 +423,18 @@ const getWinner = (region) => {
                   })),
                   {
                     updateOnDuplicate: ["walkin_connetti"],
+                  }
+                );
+              } else if (dir === "QuestionarioConsultazione2024") {
+                await Egon.bulkCreate(
+                  parsedRecords.slice(i, i + chunkSize).map((record) => ({
+                    egon: record[0],
+                    cityId: record[1],
+                    street: record[2],
+                    number: record[3],
+                    status_p1g: record[4]
+                  })), {
+                    updateOnDuplicate: ["status_p1g"]
                   }
                 );
               } else {
