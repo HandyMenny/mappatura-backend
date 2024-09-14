@@ -137,7 +137,7 @@ const getWinner = (region) => {
   const of = ["CAMPANIA", "EMILIA-ROMAGNA", "FRIULI-VENEZIA GIULIA", "LAZIO", "LOMBARDIA", "PUGLIA", "SICILIA",
     "TOSCANA", "VENETO"];
   const tim = ["ABRUZZO", "BASILICATA", "CALABRIA", "LIGURIA", "MARCHE", "MOLISE", "PIEMONTE", "SARDEGNA", "UMBRIA",
-    "VALLE D'AOSTA"];
+    "VALLE D'AOSTA", "TRENTINO-ALTO ADIGE"];
   
   return of.includes(region) ? 1 : tim.includes(region) ? 2 : 3;
 }
