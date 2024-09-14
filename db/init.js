@@ -148,7 +148,7 @@ const getWinner = (region) => {
   await db.query("PRAGMA journal_mode=OFF;");
 
   const chunkSize = 200000;
-  var dirs = ["Consultazione2021", "Consultazione2021Bianche", "Bando1Giga", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche"];
+  var dirs = ["Bando1Giga", "Consultazione2021", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche", "Consultazione2021Bianche"];
 
   // Import cities from db
   (await City.findAll()).forEach(it => {
@@ -268,9 +268,6 @@ const getWinner = (region) => {
                           number: record[3],
                           status_p1g: record[4]
                       })),
-                      {
-                          updateOnDuplicate: ["status_p1g", "street", "number"],
-                      }
                   );
               } else if(dir === "Consultazione2020") {
                   // rimini.csv has invalid egonids...
@@ -338,6 +335,9 @@ const getWinner = (region) => {
                           peakSpeed_2021: record[5],
                           below300Mbps_2021: record[6],
                       })),
+                      {
+                          updateOnDuplicate: ["color_2021", "peakSpeed_2021", "below300Mbps_2021"],
+                      }
                   );
               }
           }
