@@ -340,12 +340,16 @@ const getWinner = (region) => {
                     const piano = record[0]
                     if (piano != "piano-italia-1-giga") return [];
 
+                    let walkinStatus = getWalkinStatus(record[11]);
+                    // current has walink status +10, so we can differentiate them from history
+                    if (dir.startsWith("OpenDataConnettiCurrent")) walkinStatus += 10;
+
                     return [
                       Number(record[1]),
                       getCityId(record[3], record[4], record[5]),
                       getStreetConnetti(record[9]),
                       getHouseNumberConnetti(record[9]),
-                      getWalkinStatus(record[11])
+                      walkinStatus
                     ];
                   } else if (dir === "QuestionarioConsultazione2024") {
                     return [
