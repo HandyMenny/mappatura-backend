@@ -213,7 +213,7 @@ const getWinner = (region) => {
   await db.query("PRAGMA journal_mode=OFF;");
 
   const chunkSize = 200000;
-  var dirs = ["Bando1Giga", "QuestionarioConsultazione2024", "Consultazione2021", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche", "OpenDataConnetti20240101", "Consultazione2021Bianche"];
+  var dirs = ["Bando1Giga", "QuestionarioConsultazione2024", "Consultazione2021", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche", "OpenDataConnettiHistory", "OpenDataConnettiCurrent", "Consultazione2021Bianche"];
 
   // Import cities from db
   (await City.findAll()).forEach(it => {
