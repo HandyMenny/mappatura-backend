@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-ZIPFILE=("Consultazione2021.tar.xz" "Consultazione2021_bianche2016.tar.xz" "Bando1Giga-v1.tar.xz" "Bando1Giga_TN_BZ-v2.tar.xz" "Consultazione2020.tar.xz" "Consultazione2019.tar.xz" "Consultazione2017.tar.xz" "Consultazione2017_bianche.tar.xz")
+ZIPFILE=("QuestionarioConsultazione2024.tar.xz", "Consultazione2021.tar.xz" "Consultazione2021_bianche2016.tar.xz" "Bando1Giga-v1.tar.xz" "Bando1Giga_TN_BZ-v2.tar.xz" "Consultazione2020.tar.xz" "Consultazione2019.tar.xz" "Consultazione2017_update2018.tar.xz" "Consultazione2017_bianche.tar.xz")
 DOWNLOAD_URL="https://media.githubusercontent.com/media/HandyMenny/database-infratel/main/"
-DIR=("csv/Consultazione2021" "csv/Consultazione2021Bianche"  "csv/Bando1Giga"  "csv/Bando1Giga" "csv/Consultazione2020" "csv/Consultazione2019" "csv/Consultazione2017" "csv/Consultazione2017Bianche")
+DIR=("csv/QuestionarioConsultazione2024", "csv/Consultazione2021" "csv/Consultazione2021Bianche"  "csv/Bando1Giga"  "csv/Bando1Giga" "csv/Consultazione2020" "csv/Consultazione2019" "csv/Consultazione2017" "csv/Consultazione2017Bianche")
 
 if ! command -v wget &>/dev/null; then
   echo "wget is not found on the system, you must install it to execute this script"
