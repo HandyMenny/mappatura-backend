@@ -96,13 +96,45 @@ const getStreetWithHamletSplit = (street, hamlet) => {
     return street;
 };
 
-const normalizeRegionConnetti = (region) => {
+const normalizeRegion = (region) => {
+  region = region.trim().toUpperCase();
+  
   switch (region) {
     case "BOLZANO" :
     case "TRENTO":
       return "TRENTINO-ALTO ADIGE";
     default:
       return region;
+  }
+}
+
+const normalizeProvince = (province) => {
+  province = province.trim().toUpperCase().replaceAll("-", " ");
+  
+  switch (province) {
+    case "REGGIO NELL'EMILIA":
+      return "REGGIO EMILIA";
+    case "REGGIO DI CALABRIA":
+      return "REGGIO CALABRIA";
+    default:
+      return province;
+  }
+}
+
+const normalizeCity = (city) => {
+  city = city.trim().toUpperCase().replaceAll("-", " ").replaceAll("  ", " ");
+
+  switch (city) {
+    case "GALTELLI":
+      return "GALTELLI'";
+    case "REGGIO DI CALABRIA":
+      return "REGGIO CALABRIA";
+    case "REGGIO NELL'EMILIA":
+      return "REGGIO EMILIA";
+    case "COSTERMANO DEL GARDA":
+      return "COSTERMANO SUL GARDA";
+    default:
+      return city;
   }
 }
 
@@ -180,6 +212,10 @@ let cityCounter = 0;
    The cities array will be used to import cities.
  */
 const getCityId = (region, province, city) => {
+    region = normalizeRegion(region);
+    province = normalizeProvince(province);
+    city = normalizeCity(city);
+
     const procity = province + city;
     // Check if id already generated
     if(!(procity in cities)) {
@@ -306,7 +342,7 @@ const getWinner = (region) => {
 
                     return [
                       Number(record[1]),
-                      getCityId(normalizeRegionConnetti(record[3]), record[4], record[5]),
+                      getCityId(record[3], record[4], record[5]),
                       getStreetConnetti(record[9]),
                       getHouseNumberConnetti(record[9]),
                       getWalkinStatus(record[11])
