@@ -20,7 +20,7 @@ const Egon = db.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    // 0 = not included, 1 = OF, 2 = TIM, 3 = consultazione prossimità
+    // 0 = not included, 1 = OF, 2 = TIM, 3 = consultazione prossimità Si, 4 = consultazione prossimità No
     status_p1g: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -29,6 +29,9 @@ const Egon = db.define(
     walkin_connetti: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
+    },
+    below300Mbps_2024: {
+      type: DataTypes.INTEGER
     },
     color_2021: {
       type: DataTypes.TEXT,

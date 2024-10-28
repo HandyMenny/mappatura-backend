@@ -188,6 +188,15 @@ const getSpeed = (catString) => {
   }
 }
 
+// convert esclusione string to consultazione 2021 speed
+const getConsultazione2024Speed = (esclusioneString) => {
+    if (esclusioneString.includes("Privati")) {
+      return 1;
+    } else {
+      return 0;
+    }
+}
+
 const getWalkinStatus = (status) => {
   switch (status) {
     case "Esistente":
@@ -249,7 +258,7 @@ const getWinner = (region) => {
   await db.query("PRAGMA journal_mode=OFF;");
 
   const chunkSize = 200000;
-  var dirs = ["Bando1Giga", "QuestionarioConsultazione2024", "Consultazione2021", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche", "OpenDataConnettiHistory", "OpenDataConnettiCurrent", "Consultazione2021Bianche"];
+  var dirs = ["Bando1Giga", "Consultazione2024", "Consultazione2021", "Consultazione2020", "Consultazione2019", "Consultazione2017", "Consultazione2017Bianche", "OpenDataConnettiHistory", "OpenDataConnettiCurrent", "Consultazione2021Bianche"];
 
   // Import cities from db
   (await City.findAll()).forEach(it => {
@@ -351,13 +360,15 @@ const getWinner = (region) => {
                       getHouseNumberConnetti(record[9]),
                       walkinStatus
                     ];
-                  } else if (dir === "QuestionarioConsultazione2024") {
+                  } else if (dir === "Consultazione2024") {
                     return [
                       Number(record[0]),
                       getCityId(record[1], record[2], record[3]),
                       getStreetWithHamletSplit(record[6], record[4]),
                       getHouseNumberSplit(record[7], record[8], (record[9].replace("KM", ""))/1000),
-                      3 // 3 = in consultazione civico prossimità
+                      // 3 == potenziale civico prossimità, 4 == escluso
+                      record[12] == "SI" ? 3 : 4,
+                      getConsultazione2024Speed(record[13])
                     ];
                   } else {
                       return [
@@ -465,16 +476,17 @@ const getWinner = (region) => {
                     updateOnDuplicate: ["walkin_connetti"],
                   }
                 );
-              } else if (dir === "QuestionarioConsultazione2024") {
+              } else if (dir === "Consultazione2024") {
                 await Egon.bulkCreate(
                   parsedRecords.slice(i, i + chunkSize).map((record) => ({
                     egon: record[0],
                     cityId: record[1],
                     street: record[2],
                     number: record[3],
-                    status_p1g: record[4]
+                    status_p1g: record[4],
+                    below300Mbps_2024: record[5]
                   })), {
-                    updateOnDuplicate: ["status_p1g"]
+                    updateOnDuplicate: ["status_p1g", "below300Mbps_2024"]
                   }
                 );
               } else {
