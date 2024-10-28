@@ -102,7 +102,12 @@ const normalizeRegion = (region) => {
   switch (region) {
     case "BOLZANO" :
     case "TRENTO":
+    case "TRENTINO ALTO ADIGE":
       return "TRENTINO-ALTO ADIGE";
+    case "EMILIA ROMAGNA":
+      return "EMILIA-ROMAGNA";
+    case "FRIULI VENEZIA GIULIA":
+      return "FRIULI-VENEZIA GIULIA";  
     default:
       return region;
   }
