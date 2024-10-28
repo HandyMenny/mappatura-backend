@@ -511,5 +511,4 @@ const getWinner = (region) => {
       }
       console.log(`done processing ${dir} CSV files`);
   }
-  await db.query("VACUUM");
 })();
