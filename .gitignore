@@ -1,8 +1,8 @@
 node_modules
 .env
-db.sqlite
 npm-debug.log
 deploy.key
 deploy.env
 csv/*
 !csv/.keep
+*.sqlite
